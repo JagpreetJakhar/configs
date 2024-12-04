@@ -1,0 +1,16 @@
+# .gitignore
+
+# Vim backup files
+*.swp
+*.swo
+*.bak
+
+# Tmux logs
+*.log
+
+# Oh My Zsh custom themes and plugins
+~/.oh-my-zsh/custom/*
+
+# Ignore any other sensitive files
+*.pem
+
