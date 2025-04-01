@@ -50,7 +50,7 @@ get_ram() {
   gpu=$(get_platform)
   if [[ "$gpu" == "NVIDIA" ]]; then
     usage=$(nvidia-smi --query-gpu=memory.used,memory.total --format=csv,noheader,nounits | \
-            awk '{ used += $0; total += $2 } END { printf("%dGB/%dGB\n", used / 1024, total / 1024) }')
+            awk '{ used += $0; total += $2 } END { printf("%dMB/%dMB\n", used, total) }')
   else
     usage='unknown'
   fi
