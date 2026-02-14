@@ -98,7 +98,9 @@ end
 -- =====================
 
 vim.lsp.config("clangd", {
-  cmd = { "/usr/bin/clangd" },
+  cmd = { "/usr/bin/clangd",
+"--header-insertion=never",
+"--function-arg-placeholders=false"},
   filetypes = { "c", "cpp", "objc", "objcpp" },
   root_markers = {
     "compile_commands.json",
