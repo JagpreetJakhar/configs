@@ -98,7 +98,7 @@ end
 -- =====================
 
 vim.lsp.config("clangd", {
-  cmd = { "/opt/homebrew/opt/llvm/bin/clangd" },
+  cmd = { "/usr/bin/clangd" },
   filetypes = { "c", "cpp", "objc", "objcpp" },
   root_markers = {
     "compile_commands.json",
@@ -135,7 +135,7 @@ cmp.setup({
       luasnip.lsp_expand(args.body)
     end,
   },
- window = {
+    window = {
     completion = {
       border = 'rounded',
       winhighlight = 'Normal:CmpNormal,FloatBorder:CmpFloatBorder,CursorLine:CmpCursorLine,Search:None',
@@ -145,7 +145,11 @@ cmp.setup({
       winhighlight = 'Normal:CmpNormal,FloatBorder:CmpFloatBorder',
     },
   },
+    completion = {
+    autocomplete = false,  -- This disables auto-popup
+  },
   mapping = {
+    ["<C-Space>"] = cmp.mapping.complete(),
     ["<CR>"] = cmp.mapping.confirm({ select = true }),
     ["<Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
@@ -187,4 +191,6 @@ vim.cmd([[
   highlight CmpItemMenu guifg=#727169 guibg=NONE
   highlight PmenuSel guibg=#2D4F67 guifg=#DCD7BA
 ]])
+
+
 EOF
