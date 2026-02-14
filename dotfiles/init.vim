@@ -135,6 +135,16 @@ cmp.setup({
       luasnip.lsp_expand(args.body)
     end,
   },
+ window = {
+    completion = {
+      border = 'rounded',
+      winhighlight = 'Normal:CmpNormal,FloatBorder:CmpFloatBorder,CursorLine:CmpCursorLine,Search:None',
+    },
+    documentation = {
+      border = 'rounded',
+      winhighlight = 'Normal:CmpNormal,FloatBorder:CmpFloatBorder',
+    },
+  },
   mapping = {
     ["<CR>"] = cmp.mapping.confirm({ select = true }),
     ["<Tab>"] = cmp.mapping(function(fallback)
@@ -166,5 +176,15 @@ cmp.setup({
 -- COLORSCHEME
 -- =====================
 vim.cmd("colorscheme kanagawa")
-
+vim.cmd([[
+  highlight CmpNormal guibg=#1F1F28 guifg=#DCD7BA
+  highlight CmpFloatBorder guifg=#54546D guibg=#1F1F28
+  highlight CmpCursorLine guibg=#2D4F67
+  highlight CmpItemAbbr guifg=#DCD7BA guibg=NONE
+  highlight CmpItemAbbrMatch guifg=#7E9CD8 guibg=NONE gui=bold
+  highlight CmpItemAbbrMatchFuzzy guifg=#7E9CD8 guibg=NONE
+  highlight CmpItemKind guifg=#7FB4CA guibg=NONE
+  highlight CmpItemMenu guifg=#727169 guibg=NONE
+  highlight PmenuSel guibg=#2D4F67 guifg=#DCD7BA
+]])
 EOF
