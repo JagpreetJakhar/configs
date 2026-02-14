@@ -56,13 +56,22 @@ Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'L3MON4D3/LuaSnip'
 Plug 'saadparwaiz1/cmp_luasnip'
-
+Plug 'windwp/nvim-autopairs'
 call plug#end()
 
 " =========================
 " LUA CONFIGURATION
 " =========================
 lua << EOF
+
+require("nvim-autopairs").setup({
+  check_ts = true,  -- Enable treesitter integration
+  ts_config = {
+    lua = {'string'},
+    javascript = {'template_string'},
+  },
+  fast_wrap = {},
+})
 
 -- =====================
 -- NVIM TREE
@@ -98,9 +107,9 @@ end
 -- =====================
 
 vim.lsp.config("clangd", {
-  cmd = { "/usr/bin/clangd",
-"--header-insertion=never",
-"--function-arg-placeholders=false"},
+  cmd = { "/usr/bin/clangd" ,
+  "--header-insertion=never",
+  "--function-arg-placeholders=false"},
   filetypes = { "c", "cpp", "objc", "objcpp" },
   root_markers = {
     "compile_commands.json",
@@ -120,7 +129,14 @@ vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename)
 vim.keymap.set('n', '<leader>f', function()
   vim.lsp.buf.format({ async = true })
 end)
+vim.api.nvim_create_autocmd("CursorHold", {
+  callback = function()
+    vim.diagnostic.open_float(nil, { focus = false })
+  end
+})
 
+-- Adjust the delay (default is 4000ms)
+vim.opt.updatetime = 500
 -- Let semantic tokens override treesitter
 vim.highlight.priorities.semantic_tokens = 200
 
@@ -130,7 +146,7 @@ vim.highlight.priorities.semantic_tokens = 200
 
 local cmp = require("cmp")
 local luasnip = require("luasnip")
-
+local cmp_autopairs = require("nvim-autopairs.completion.cmp")
 cmp.setup({
   snippet = {
     expand = function(args)
@@ -177,7 +193,7 @@ cmp.setup({
     { name = "luasnip" },
   },
 })
-
+cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 -- =====================
 -- COLORSCHEME
 -- =====================
