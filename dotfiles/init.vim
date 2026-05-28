@@ -107,7 +107,7 @@ end
 -- =====================
 
 vim.lsp.config("clangd", {
-  cmd = { "/usr/bin/clangd" ,
+  cmd = { "/opt/homebrew/opt/llvm/bin/clangd" ,
   "--header-insertion=never",
   "--function-arg-placeholders=false"},
   filetypes = { "c", "cpp", "objc", "objcpp" },
@@ -119,7 +119,61 @@ vim.lsp.config("clangd", {
 })
 
 vim.lsp.enable("clangd")
+vim.lsp.config("rust_analyzer", {
+  cmd = { "rust-analyzer" },
+  filetypes = { "rust" },
+  root_markers = { "Cargo.toml", "Cargo.lock", ".git" },
+  settings = {
+    ["rust-analyzer"] = {
+      checkOnSave = {
+        command = "clippy",  -- uses clippy for linting instead of just check
+      },
+      diagnostics = {
+        enable = true,
+      },
+    },
+  },
+})
+-- =====================
+-- RUFF (Python linting + formatting)
+-- =====================
+vim.lsp.config("ruff", {
+  cmd = { "ruff", "server" },
+  filetypes = { "python" },
+  root_markers = { "pyproject.toml", "ruff.toml", ".ruff.toml", ".git" },
+  init_options = {
+    settings = {}
+  }
+})
 
+vim.lsp.enable("ruff")
+
+-- Disable ruff's hover in favor of pyright
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(args)
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if client and client.name == "ruff" then
+      client.server_capabilities.hoverProvider = false
+    end
+  end,
+})
+vim.lsp.enable("rust_analyzer")
+
+vim.lsp.config("pyright", {
+  cmd = { "pyright-langserver", "--stdio" },
+  filetypes = { "python" },
+  root_markers = { "pyproject.toml", "setup.py", "setup.cfg", ".git" },
+  settings = {
+    python = {
+      analysis = {
+        typeCheckingMode = "basic",  -- "off", "basic", or "strict"
+        autoImportCompletions = true,
+      },
+    },
+  },
+})
+
+vim.lsp.enable("pyright")
 -- LSP Keymaps
 vim.keymap.set('n', 'gd', vim.lsp.buf.definition)
 vim.keymap.set('n', 'gr', vim.lsp.buf.references)
@@ -132,6 +186,18 @@ end)
 vim.api.nvim_create_autocmd("CursorHold", {
   callback = function()
     vim.diagnostic.open_float(nil, { focus = false })
+  end
+})
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = "*.rs",
+  callback = function()
+    vim.lsp.buf.format({ async = false })
+  end
+})
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = { "*.rs", "*.c", "*.cpp", "*.h", "*.py" },
+  callback = function()
+    vim.lsp.buf.format({ async = false })
   end
 })
 
