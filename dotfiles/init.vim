@@ -33,7 +33,7 @@ syntax on
 " Disable netrw (for nvim-tree)
 let g:loaded_netrw = 1
 let g:loaded_netrwPlugin = 1
-
+let mapleader = " "
 nnoremap <C-n> :NvimTreeToggle<CR>
 
 " =========================
@@ -175,6 +175,7 @@ vim.lsp.config("pyright", {
 
 vim.lsp.enable("pyright")
 -- LSP Keymaps
+vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action)
 vim.keymap.set('n', 'gd', vim.lsp.buf.definition)
 vim.keymap.set('n', 'gr', vim.lsp.buf.references)
 vim.keymap.set('n', 'gi', vim.lsp.buf.implementation)
